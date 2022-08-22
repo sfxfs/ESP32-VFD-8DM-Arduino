@@ -45,16 +45,16 @@
 #define SET_DISPLAT_LIGHT_OFF 0xEA
 #define SET_STAND_BY_MODE 0xEC
 
+typedef struct {
+    uint8_t cmd;
+    uint8_t data;
+} VFD_cmd_t;
+
 void SPI_Init();
 void VFD_Init();
 void VFD_Clear(char bit);
 void VFD_Show_str(char bit, String str);
 void VFD_write_cmd(SPIClass *spi, VFD_cmd_t VFD_cmd);
 void VFD_write_data(SPIClass *spi, byte data);
-
-typedef struct {
-    uint8_t cmd;
-    uint8_t data;
-} VFD_cmd_t;
 
 #endif

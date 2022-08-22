@@ -57,7 +57,7 @@ void VFD_Show_str(char bit, String str)
     for (size_t i = 0; i < str.length(); i++)
     {
         VFD_write_data(vspi, DCRAM_DATA_WRITE | bit);
-        VFD_write_data(vspi, str.charAt(i));
+        VFD_write_data(vspi, (int)str.charAt(i));
         if (bit < VFD_DIGITS - 1)
         {
             bit += 1;
