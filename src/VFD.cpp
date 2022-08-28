@@ -31,7 +31,7 @@ void VFD_Init()
 {
     for (size_t i = 0; i < 3; i++)
     {
-        VFD_write_cmd(vspi, VFD_initcmd[i]);
+        VFD_Set_cmd(vspi, VFD_initcmd[i].cmd, VFD_initcmd[i].data);
     }
 }
 
@@ -41,14 +41,15 @@ void VFD_Clear(char bit)
     {
         for (size_t i = 0; i < 8; i++)
         {
-            VFD_write_data(vspi, DCRAM_DATA_WRITE | i);
-            VFD_write_data(vspi, DGRAM_DATA_CLAER);
+            VFD_Set_cmd(vspi, DCRAM_DATA_WRITE | i, DGRAM_DATA_CLAER);
         }
     }
     else
     {
-        VFD_write_data(vspi, DCRAM_DATA_WRITE | bit);
-        VFD_write_data(vspi, DGRAM_DATA_CLAER);
+        if (bit > -1 && bit < 8)
+        {
+            VFD_Set_cmd(vspi, DCRAM_DATA_WRITE | bit, DGRAM_DATA_CLAER);
+        }
     }
 }
 
@@ -56,8 +57,7 @@ void VFD_Show_str(char bit, String str)
 {
     for (size_t i = 0; i < str.length(); i++)
     {
-        VFD_write_data(vspi, DCRAM_DATA_WRITE | bit);
-        VFD_write_data(vspi, (int)str.charAt(i));
+        VFD_Set_cmd(vspi, DCRAM_DATA_WRITE | bit, (int)str.charAt(i));
         if (bit < VFD_DIGITS - 1)
         {
             bit += 1;
@@ -69,20 +69,26 @@ void VFD_Show_str(char bit, String str)
     }
 }
 
-void VFD_write_cmd(SPIClass *spi, VFD_cmd_t VFD_cmd)
+void VFD_On()
 {
-    spi->beginTransaction(SPISettings(spiClk, LSBFIRST, SPI_MODE0));
-    digitalWrite(spi->pinSS(), LOW); // pull SS slow to prep other end for transfer
-    spi->transfer(VFD_cmd.cmd);
-    spi->transfer(VFD_cmd.data);
-    digitalWrite(spi->pinSS(), HIGH); // pull ss high to signify end of data transfer
-    spi->endTransaction();
+    VFD_Set_cmd(vspi, SET_STAND_BY_MODE, 0x00);
 }
 
-void VFD_write_data(SPIClass *spi, byte data)
+void VFD_Off()
+{
+    VFD_Set_cmd(vspi, SET_STAND_BY_MODE | 1, 0x00);
+}
+
+void VFD_Write_custdata()
+{
+    
+}
+
+void VFD_Set_cmd(SPIClass *spi, byte cmd, byte data)
 {
     spi->beginTransaction(SPISettings(spiClk, LSBFIRST, SPI_MODE0));
     digitalWrite(spi->pinSS(), LOW); // pull SS slow to prep other end for transfer
+    spi->transfer(cmd);
     spi->transfer(data);
     digitalWrite(spi->pinSS(), HIGH); // pull ss high to signify end of data transfer
     spi->endTransaction();

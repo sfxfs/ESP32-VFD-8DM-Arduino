@@ -54,7 +54,8 @@ void SPI_Init();
 void VFD_Init();
 void VFD_Clear(char bit);
 void VFD_Show_str(char bit, String str);
-void VFD_write_cmd(SPIClass *spi, VFD_cmd_t VFD_cmd);
-void VFD_write_data(SPIClass *spi, byte data);
+void VFD_Set_cmd(SPIClass *spi, byte cmd, byte data);
+void VFD_On();
+void VFD_Off();
 
 #endif
