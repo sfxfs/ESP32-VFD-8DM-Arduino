@@ -89,9 +89,9 @@ void VFD_Show_custdata(char bit, byte *data) // data为5个字节
     {
         vspi->transfer(data[i]);
     }
-    VFD_Set_cmd(DCRAM_DATA_WRITE | bit, bit);
     digitalWrite(vspi->pinSS(), HIGH);
     vspi->endTransaction();
+    VFD_Set_cmd(DCRAM_DATA_WRITE | bit, bit);
 }
 
 void VFD_Set_cmd(byte cmd, byte data)
