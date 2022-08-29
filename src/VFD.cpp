@@ -29,6 +29,7 @@ void SPI_Init()
 
 void VFD_Init()
 {
+    SPI_Init();
     for (size_t i = 0; i < 3; i++)
     {
         VFD_Set_cmd(VFD_initcmd[i].cmd, VFD_initcmd[i].data);
@@ -79,7 +80,7 @@ void VFD_Off()
     VFD_Set_cmd(SET_STAND_BY_MODE | 1, 0x00);
 }
 
-void VFD_Show_custdata(char bit, byte data[]) // data为5个字节
+void VFD_Show_custdata(char bit, byte *data) // data为5个字节
 {
     vspi->beginTransaction(SPISettings(spiClk, LSBFIRST, SPI_MODE0));
     digitalWrite(vspi->pinSS(), LOW);

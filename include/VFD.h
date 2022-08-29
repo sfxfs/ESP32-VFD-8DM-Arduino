@@ -6,15 +6,15 @@
 
 // Define ALTERNATE_PINS to use non-standard GPIO pins for SPI bus
 #ifdef ALTERNATE_PINS
-  #define VSPI_MISO   2
-  #define VSPI_MOSI   4
-  #define VSPI_SCLK   0
-  #define VSPI_SS     33
+#define VSPI_MISO 2
+#define VSPI_MOSI 4
+#define VSPI_SCLK 0
+#define VSPI_SS 33
 #else
-  #define VSPI_MISO   MISO
-  #define VSPI_MOSI   MOSI
-  #define VSPI_SCLK   SCK
-  #define VSPI_SS     SS
+#define VSPI_MISO MISO
+#define VSPI_MOSI MOSI
+#define VSPI_SCLK SCK
+#define VSPI_SS SS
 #endif
 
 #if CONFIG_IDF_TARGET_ESP32S2 || CONFIG_IDF_TARGET_ESP32S3
@@ -36,9 +36,10 @@
 #define SET_DISPLAT_LIGHT_OFF 0xEA
 #define SET_STAND_BY_MODE 0xEC
 
-typedef struct {
-    uint8_t cmd;
-    uint8_t data;
+typedef struct
+{
+  uint8_t cmd;
+  uint8_t data;
 } VFD_cmd_t;
 
 void SPI_Init();
@@ -46,7 +47,7 @@ void VFD_Init();
 void VFD_Clear(char bit);
 void VFD_Show_str(char bit, String str);
 void VFD_Set_cmd(byte cmd, byte data);
-void VFD_Show_custdata(char bit, byte data[]);
+void VFD_Show_custdata(char bit, byte *data);
 void VFD_On();
 void VFD_Off();
 
