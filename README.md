@@ -15,7 +15,7 @@
 | 2    | *void* VFD_Clear(*char* **bit**)                             | **bit**:显示位                          | 清空指定位的显示,当bit为-1时,清空所有位的显示 |
 | 3    | *void* VFD_Show_str(*char* **bit**, String **str**)          | **bit**:显示位   **str**:要显示的字符串 | 在指定位之后显示字符串                        |
 | 4    | *void* VFD_Set_cmd(byte **cmd**, byte **data**)              | **cmd**:命令  **data**:数据             | 直接向VFD发送指令                             |
-| 5    | *void* VFD_Show_custdata(*char* **bit**, byte ***** **data**) | **bit**:显示位  ***data**:图像的数组    | 显示自定义的图像                              |
+| 5    | *void* VFD_Show_custdata(*char* **bit**, byte * **data**) | **bit**:显示位  ***data**:图像的数组    | 显示自定义的图像                              |
 | 6    | *void* VFD_On()                                              | **NONE**                                | 开启VFD                                       |
 | 7    | *void* VFD_Off()                                             | **NONE**                                | 关闭VFD                                       |
 | 8    | *void* VFD_Set_dimming(byte **dimming**)                     | **dimming**:显示亮度                    | 设置VFD的显示亮度                             |
