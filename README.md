@@ -18,5 +18,5 @@
 | 5    | *void* VFD_Show_custdata(*char* **bit**, byte * **data**) | **bit**:显示位  ***data**:图像的数组    | 显示自定义的图像                              |
 | 6    | *void* VFD_On()                                              | **NONE**                                | 开启VFD                                       |
 | 7    | *void* VFD_Off()                                             | **NONE**                                | 关闭VFD                                       |
-| 8    | *void* VFD_Set_dimming(byte **dimming**)                     | **dimming**:显示亮度                    | 设置VFD的显示亮度                             |
+| 8    | *void* VFD_Set_dimming(byte **dimming**)                     | **dimming**:显示亮度                    | 设置VFD的显示亮度(范围0 ~ 255)                     |
 
