@@ -16,8 +16,18 @@ void loop(){
   delay(1000);
   VFD_Show_str(0, "ABCDE");
   delay(1000);
+  for (size_t i = 255; i >= 0; i--)
+  {
+    VFD_Set_dimming(i);
+    delay(10);
+  }
   VFD_Clear(-1);
   VFD_Show_custdata(0, image);
+  for (size_t i = 0; i <= 255; i++)
+  {
+    VFD_Set_dimming(i);
+    delay(10);
+  }
   delay(1000);
   VFD_Off();
   delay(1000);
