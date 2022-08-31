@@ -50,5 +50,6 @@ void VFD_Set_cmd(byte cmd, byte data);
 void VFD_Show_custdata(char bit, byte *data);
 void VFD_On();
 void VFD_Off();
+void VFD_Set_dimming(byte dimming);
 
 #endif

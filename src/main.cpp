@@ -12,8 +12,11 @@ void loop(){
   VFD_On();
   VFD_Show_str(0, "12345");
   delay(1000);
+  VFD_Clear(1);
+  delay(1000);
   VFD_Show_str(0, "ABCDE");
   delay(1000);
+  VFD_Clear(-1);
   VFD_Show_custdata(0, image);
   delay(1000);
   VFD_Off();

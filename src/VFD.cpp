@@ -80,6 +80,11 @@ void VFD_Off()
     VFD_Set_cmd(SET_STAND_BY_MODE | 1, 0x00);
 }
 
+void VFD_Set_dimming(byte dimming)  // 0 <= dimming <= 255
+{
+    VFD_Set_cmd(SET_DIMMING_DATA, dimming);
+}
+
 void VFD_Show_custdata(char bit, byte *data) // data为5个字节
 {
     vspi->beginTransaction(SPISettings(spiClk, LSBFIRST, SPI_MODE0));
