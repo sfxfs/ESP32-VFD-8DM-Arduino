@@ -4,7 +4,7 @@
 #include <Arduino.h>
 #include <SPI.h>
 
-// Define ALTERNATE_PINS to use non-standard GPIO pins for SPI bus
+// 定义 ALTERNATE_PINS 来指定非标准 GPIO 引脚用于 SPI 总线通讯
 #ifdef ALTERNATE_PINS
 #define VSPI_MISO 2
 #define VSPI_MOSI 4
