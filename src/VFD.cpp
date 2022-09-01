@@ -90,20 +90,30 @@ void VFD_Standby_mode(bool mode)
 
 void VFD_Show_custdata(char bit, char flag)
 {
-    VFD_Set_cmd(DCRAM_DATA_WRITE | bit, flag);
+    if (flag >= 0 && flag <= 7)
+    {
+        VFD_Set_cmd(DCRAM_DATA_WRITE | bit, flag);
+    }
+    else
+        VFD_Show_str(0, "error0");  //error0代表写入字符超出存储空间
 }
 
 void VFD_Write_custdata(char flag, byte *data) // data为5个字节，CGRAM最多能存8个自定义字符
 {
-    vspi->beginTransaction(SPISettings(spiClk, LSBFIRST, SPI_MODE0));
-    digitalWrite(vspi->pinSS(), LOW);
-    vspi->transfer(CGRAM_DATA_WRITE | flag);
-    for (size_t i = 0; i < 5; i++)
+    if (flag >= 0 && flag <= 7)
     {
-        vspi->transfer(data[i]);
+        vspi->beginTransaction(SPISettings(spiClk, LSBFIRST, SPI_MODE0));
+        digitalWrite(vspi->pinSS(), LOW);
+        vspi->transfer(CGRAM_DATA_WRITE | flag);
+        for (size_t i = 0; i < 5; i++)
+        {
+            vspi->transfer(data[i]);
+        }
+        digitalWrite(vspi->pinSS(), HIGH);
+        vspi->endTransaction();
     }
-    digitalWrite(vspi->pinSS(), HIGH);
-    vspi->endTransaction();
+    else
+        VFD_Show_str(0, "error0");
 }
 
 void VFD_Set_cmd(byte cmd, byte data)
