@@ -9,13 +9,16 @@ void setup(){
 }
 
 void loop(){
-  VFD_On();
+  VFD_Display_status(true);
   VFD_Show_str(0, "12345");
   delay(1000);
   VFD_Clear(1);
   delay(1000);
   VFD_Show_str(0, "ABCDE");
   delay(1000);
+  VFD_Standby_mode(true);
+  delay(1000);
+  VFD_Standby_mode(false);
   for (size_t i = 255; i >= 0; i--)
   {
     VFD_Set_dimming(i);
@@ -29,6 +32,6 @@ void loop(){
     delay(10);
   }
   delay(1000);
-  VFD_Off();
+  VFD_Display_status(false);
   delay(1000);
 }
