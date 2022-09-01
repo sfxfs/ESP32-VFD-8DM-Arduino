@@ -2,9 +2,9 @@
 
 static const int spiClk = 5000000; // 5 MHz
 SPIClass *vspi = NULL;
-const VFD_cmd_t VFD_initcmd[] = {{SET_DISPLAY_TIMING, VFD_DIGITS - 1},
-                                 {SET_DIMMING_DATA, VFD_DIMMING},
-                                 {SET_DISPLAT_LIGHT_ON, 0x00}};
+const VFD_cmd_t VFD_initcmd[] = {{SET_DISPLAY_TIMING, VFD_DIGITS - 1},  //设置显示位数
+                                 {SET_DIMMING_DATA, VFD_DIMMING},   //设置显示亮度
+                                 {SET_DISPLAT_LIGHT_ON, 0x00}}; //设置开启显示
 
 void SPI_Init()
 {
@@ -104,10 +104,10 @@ void VFD_Write_custdata(char flag, byte *data) // data为5个字节，CGRAM最�
     {
         vspi->beginTransaction(SPISettings(spiClk, LSBFIRST, SPI_MODE0));
         digitalWrite(vspi->pinSS(), LOW);
-        vspi->transfer(CGRAM_DATA_WRITE | flag);
+        vspi->transfer(CGRAM_DATA_WRITE | flag);    //指定存放位置
         for (size_t i = 0; i < 5; i++)
         {
-            vspi->transfer(data[i]);
+            vspi->transfer(data[i]);        //写入图形数据
         }
         digitalWrite(vspi->pinSS(), HIGH);
         vspi->endTransaction();
@@ -118,10 +118,10 @@ void VFD_Write_custdata(char flag, byte *data) // data为5个字节，CGRAM最�
 
 void VFD_Set_cmd(byte cmd, byte data)
 {
-    vspi->beginTransaction(SPISettings(spiClk, LSBFIRST, SPI_MODE0));
-    digitalWrite(vspi->pinSS(), LOW);
-    vspi->transfer(cmd);
+    vspi->beginTransaction(SPISettings(spiClk, LSBFIRST, SPI_MODE0));   //设置SPI时钟，高低位优先，SPI模式
+    digitalWrite(vspi->pinSS(), LOW);   //拉低片选，代表开始传输
+    vspi->transfer(cmd);    //写入数据
     vspi->transfer(data);
-    digitalWrite(vspi->pinSS(), HIGH);
+    digitalWrite(vspi->pinSS(), HIGH);  //拉高片选，结束传输
     vspi->endTransaction();
 }
