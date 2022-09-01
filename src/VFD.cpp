@@ -88,18 +88,22 @@ void VFD_Standby_mode(bool mode)
     VFD_Set_cmd(SET_STAND_BY_MODE | mode, 0x00);
 }
 
-void VFD_Show_custdata(char bit, byte *data) // data为5个字节
+void VFD_Show_custdata(char bit, char flag)
+{
+    VFD_Set_cmd(DCRAM_DATA_WRITE | bit, flag);
+}
+
+void VFD_Write_custdata(char flag, byte *data) // data为5个字节，CGRAM最多能存8个自定义字符
 {
     vspi->beginTransaction(SPISettings(spiClk, LSBFIRST, SPI_MODE0));
     digitalWrite(vspi->pinSS(), LOW);
-    vspi->transfer(CGRAM_DATA_WRITE | bit);
+    vspi->transfer(CGRAM_DATA_WRITE | flag);
     for (size_t i = 0; i < 5; i++)
     {
         vspi->transfer(data[i]);
     }
     digitalWrite(vspi->pinSS(), HIGH);
     vspi->endTransaction();
-    VFD_Set_cmd(DCRAM_DATA_WRITE | bit, bit);
 }
 
 void VFD_Set_cmd(byte cmd, byte data)

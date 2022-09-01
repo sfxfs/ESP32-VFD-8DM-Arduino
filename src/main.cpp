@@ -25,7 +25,8 @@ void loop(){
     delay(10);
   }
   VFD_Clear(-1);
-  VFD_Show_custdata(0, image);
+  VFD_Write_custdata(0, image);
+  VFD_Show_custdata(0, 0);
   for (size_t i = 0; i <= 255; i++)
   {
     VFD_Set_dimming(i);
