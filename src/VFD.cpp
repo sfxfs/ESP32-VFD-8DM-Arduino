@@ -70,19 +70,22 @@ void VFD_Show_str(char bit, String str)
     }
 }
 
-void VFD_On()
-{
-    VFD_Set_cmd(SET_STAND_BY_MODE, 0x00);
-}
-
-void VFD_Off()
-{
-    VFD_Set_cmd(SET_STAND_BY_MODE | 1, 0x00);
-}
-
-void VFD_Set_dimming(byte dimming)  // 0 <= dimming <= 255
+void VFD_Set_dimming(byte dimming) // 0 <= dimming <= 255
 {
     VFD_Set_cmd(SET_DIMMING_DATA, dimming);
+}
+
+void VFD_Display_status(bool status)
+{
+    if (status == true)
+        VFD_Set_cmd(SET_DISPLAT_LIGHT_ON, 0x00);
+    else
+        VFD_Set_cmd(SET_DISPLAT_LIGHT_OFF, 0x00);
+}
+
+void VFD_Standby_mode(bool mode)
+{
+    VFD_Set_cmd(SET_STAND_BY_MODE | mode, 0x00);
 }
 
 void VFD_Show_custdata(char bit, byte *data) // data为5个字节
