@@ -2,9 +2,9 @@
 
 static const int spiClk = 5000000; // 5 MHz
 SPIClass *vspi = NULL;
-const VFD_cmd_t VFD_initcmd[] = {{SET_DISPLAY_TIMING, VFD_DIGITS - 1}, //设置显示位数
-                                 {SET_DIMMING_DATA, VFD_DIMMING},      //设置显示亮度
-                                 {SET_DISPLAT_LIGHT_ON, 0x00}};        //设置开启显示
+VFD_cmd_t VFD_initcmd[] = {{SET_DISPLAY_TIMING, EMPTY_DATA},    //设置显示位数
+                           {SET_DIMMING_DATA, EMPTY_DATA},      //设置显示亮度
+                           {SET_DISPLAT_LIGHT_ON, EMPTY_DATA}}; //设置开启显示
 
 void VFD_Display::SPI_Init()
 {
@@ -14,17 +14,21 @@ void VFD_Display::SPI_Init()
     pinMode(vspi->pinSS(), OUTPUT); // VSPI SS
 
     //使能VFD
-    pinMode(VFD_EN_PIN, OUTPUT);
-    digitalWrite(VFD_EN_PIN, HIGH);
+    pinMode(vfd_en_pin, OUTPUT);
+    digitalWrite(vfd_en_pin, HIGH);
 
     //重置VFD
-    pinMode(VFD_RESET_PIN, OUTPUT);
-    digitalWrite(VFD_RESET_PIN, HIGH);
+    pinMode(vfd_reset_pin, OUTPUT);
+    digitalWrite(vfd_reset_pin, HIGH);
     delay(1);
-    digitalWrite(VFD_RESET_PIN, LOW);
+    digitalWrite(vfd_reset_pin, LOW);
     delay(10);
-    digitalWrite(VFD_RESET_PIN, HIGH);
+    digitalWrite(vfd_reset_pin, HIGH);
     delay(3);
+
+    //初始化配置值
+    VFD_initcmd[0].data = vfd_digits - 1;
+    VFD_initcmd[1].data = vfd_dimming;
 }
 
 void VFD_Display::VFD_Init()
@@ -59,7 +63,7 @@ void VFD_Display::VFD_Show_str(char bit, String str)
     for (size_t i = 0; i < str.length(); i++)
     {
         VFD_Set_cmd(DCRAM_DATA_WRITE | bit, (int)str.charAt(i));
-        if (bit < VFD_DIGITS - 1)
+        if (bit < vfd_digits - 1)
         {
             bit += 1;
         }
@@ -78,19 +82,19 @@ void VFD_Display::VFD_Set_dimming(byte dimming) // 0 <= dimming <= 255
 void VFD_Display::VFD_Display_status(bool status)
 {
     if (status == true)
-        VFD_Set_cmd(SET_DISPLAT_LIGHT_ON, 0x00);
+        VFD_Set_cmd(SET_DISPLAT_LIGHT_ON, EMPTY_DATA);
     else
-        VFD_Set_cmd(SET_DISPLAT_LIGHT_OFF, 0x00);
+        VFD_Set_cmd(SET_DISPLAT_LIGHT_OFF, EMPTY_DATA);
 }
 
 void VFD_Display::VFD_Standby_mode(bool mode)
 {
-    VFD_Set_cmd(SET_STAND_BY_MODE | mode, 0x00);
+    VFD_Set_cmd(SET_STAND_BY_MODE | mode, EMPTY_DATA);
 }
 
 void VFD_Display::VFD_Show_custdata(char bit, char flag)
 {
-    if (flag >= 0 && flag <= 7)
+    if (flag >= 0 && flag <= 17)
     {
         VFD_Set_cmd(DCRAM_DATA_WRITE | bit, flag);
     }
@@ -100,7 +104,7 @@ void VFD_Display::VFD_Show_custdata(char bit, char flag)
 
 void VFD_Display::VFD_Write_custdata(char flag, byte *data) // data为5个字节，CGRAM最多能存8个自定义字符
 {
-    if (flag >= 0 && flag <= 7)
+    if (flag >= 0 && flag <= 17)
     {
         vspi->beginTransaction(SPISettings(spiClk, LSBFIRST, SPI_MODE0));
         digitalWrite(vspi->pinSS(), LOW);
