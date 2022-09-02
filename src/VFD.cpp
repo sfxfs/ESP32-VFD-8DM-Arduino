@@ -4,7 +4,7 @@ static const int spiClk = 5000000; // 5 MHz
 SPIClass *vspi = NULL;
 const VFD_cmd_t VFD_initcmd[] = {{SET_DISPLAY_TIMING, VFD_DIGITS - 1},  //设置显示位数
                                  {SET_DIMMING_DATA, VFD_DIMMING},   //设置显示亮度
-                                 {SET_DISPLAT_LIGHT_ON, 0x00}}; //设置开启显示
+                                 {SET_DISPLAT_LIGHT_ON, EMPTY_DATA}}; //设置开启显示
 
 void SPI_Init()
 {
@@ -78,14 +78,14 @@ void VFD_Set_dimming(byte dimming) // 0 <= dimming <= 255
 void VFD_Display_status(bool status)
 {
     if (status == true)
-        VFD_Set_cmd(SET_DISPLAT_LIGHT_ON, 0x00);
+        VFD_Set_cmd(SET_DISPLAT_LIGHT_ON, EMPTY_DATA);
     else
-        VFD_Set_cmd(SET_DISPLAT_LIGHT_OFF, 0x00);
+        VFD_Set_cmd(SET_DISPLAT_LIGHT_OFF, EMPTY_DATA);
 }
 
 void VFD_Standby_mode(bool mode)
 {
-    VFD_Set_cmd(SET_STAND_BY_MODE | mode, 0x00);
+    VFD_Set_cmd(SET_STAND_BY_MODE | mode, EMPTY_DATA);
 }
 
 void VFD_Show_custdata(char bit, char flag)
@@ -98,7 +98,7 @@ void VFD_Show_custdata(char bit, char flag)
         VFD_Show_str(0, "error0");  //error0代表写入字符超出存储空间
 }
 
-void VFD_Write_custdata(char flag, byte *data) // data为5个字节，CGRAM最多能存8个自定义字符
+void VFD_Write_custdata(char flag, byte *data) // data为5个字节，CGRAM最多能存18个自定义字符
 {
     if (flag >= 0 && flag <= 17)
     {

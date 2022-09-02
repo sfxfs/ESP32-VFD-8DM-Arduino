@@ -35,6 +35,7 @@
 #define SET_DISPLAT_LIGHT_ON 0xE8
 #define SET_DISPLAT_LIGHT_OFF 0xEA
 #define SET_STAND_BY_MODE 0xEC
+#define EMPTY_DATA 0x00
 
 typedef struct
 {
