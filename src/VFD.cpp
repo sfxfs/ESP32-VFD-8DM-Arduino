@@ -90,7 +90,7 @@ void VFD_Standby_mode(bool mode)
 
 void VFD_Show_custdata(char bit, char flag)
 {
-    if (flag >= 0 && flag <= 7)
+    if (flag >= 0 && flag <= 17)
     {
         VFD_Set_cmd(DCRAM_DATA_WRITE | bit, flag);
     }
@@ -100,7 +100,7 @@ void VFD_Show_custdata(char bit, char flag)
 
 void VFD_Write_custdata(char flag, byte *data) // data为5个字节，CGRAM最多能存8个自定义字符
 {
-    if (flag >= 0 && flag <= 7)
+    if (flag >= 0 && flag <= 17)
     {
         vspi->beginTransaction(SPISettings(spiClk, LSBFIRST, SPI_MODE0));
         digitalWrite(vspi->pinSS(), LOW);
