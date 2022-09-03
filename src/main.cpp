@@ -28,7 +28,7 @@ void loop(){
   delay(1000);
   
   VFD_Standby_mode(false);  //退出省电模式
-  for (size_t i = 255; i >= 0; i--)
+  for (int i = 255; i >= 0; i--)
   {
     VFD_Set_dimming(i); //字符淡出效果
     delay(10);
@@ -36,7 +36,7 @@ void loop(){
   VFD_Clear(-1);  //清除所有位的显示
   VFD_Write_custdata(0, image); //写入自定义字符，保存为第0个自定义字符
   VFD_Show_custdata(1, 0);  //在第二位显示第0个自定义字符
-  for (size_t i = 0; i <= 255; i++)
+  for (int i = 0; i <= 255; i++)
   {
     VFD_Set_dimming(i); //字符淡入效果
     delay(10);
