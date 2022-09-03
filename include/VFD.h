@@ -43,7 +43,6 @@ typedef struct
   uint8_t data;
 } VFD_cmd_t;
 
-void SPI_Init();
 void VFD_Init();
 void VFD_Clear(char bit);
 void VFD_Show_str(char bit, String str);
