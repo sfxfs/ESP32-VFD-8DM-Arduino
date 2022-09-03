@@ -25,7 +25,7 @@
 #define VFD_RESET_PIN 17
 
 #define VFD_DIGITS 8
-#define VFD_DIMMING 255
+#define VFD_DIMMING 240
 
 #define DCRAM_DATA_WRITE 0x20
 #define DGRAM_DATA_CLAER 0x10
