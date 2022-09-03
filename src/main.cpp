@@ -33,7 +33,7 @@ void loop()
   delay(1000);
 
   VFD.VFD_Standby_mode(false); //退出省电模式
-  for (size_t i = 255; i >= 0; i--)
+  for (size_t i = 255; i > 0; i--)
   {
     VFD.VFD_Set_dimming(i); //字符淡出效果
     delay(10);
