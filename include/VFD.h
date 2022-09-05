@@ -47,7 +47,13 @@ typedef struct
 class VFD_Display
 {
 public:
-  VFD_Display(byte vfd_spi = VSPI, byte vfd_en = VFD_EN_PIN, byte vfd_reset = VFD_RESET_PIN, byte vfd_dig = VFD_DIGITS, byte vfd_dim = VFD_DIMMING);
+  VFD_Display(
+    byte vfd_spi = VSPI
+  , byte vfd_en = VFD_EN_PIN
+  , byte vfd_reset = VFD_RESET_PIN
+  , byte vfd_dig = VFD_DIGITS
+  , byte vfd_dim = VFD_DIMMING
+  );
   ~VFD_Display();
   byte vfd_spi_num;
   byte vfd_en_pin;
