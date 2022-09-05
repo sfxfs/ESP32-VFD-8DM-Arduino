@@ -1,5 +1,7 @@
-/*这是一个实例程序
-This is a example program*/
+/*
+这是一个实例程序
+This is a example program
+*/
 
 #include <VFD.h>  //使用显示驱动前请先包含该头文件
 
