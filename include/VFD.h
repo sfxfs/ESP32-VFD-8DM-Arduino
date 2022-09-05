@@ -1,5 +1,5 @@
-#ifndef __VFD_H
-#define __VFD_H
+#ifndef _VFD_H
+#define _VFD_H
 
 #include <Arduino.h>
 #include <SPI.h>
