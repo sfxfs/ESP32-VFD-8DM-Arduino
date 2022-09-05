@@ -3,6 +3,7 @@
 
 #include <Arduino.h>
 #include <SPI.h>
+#include <esp_log.h>
 
 // 定义 ALTERNATE_PINS 来指定非标准 GPIO 引脚用于 SPI 总线通讯
 #ifdef ALTERNATE_PINS
@@ -46,10 +47,13 @@ typedef struct
 class VFD_Display
 {
 public:
-  byte vfd_en_pin = VFD_EN_PIN;
-  byte vfd_reset_pin = VFD_RESET_PIN;
-  byte vfd_digits = VFD_DIGITS;
-  byte vfd_dimming = VFD_DIMMING;
+  VFD_Display(byte vfd_spi = VSPI, byte vfd_en = VFD_EN_PIN, byte vfd_reset = VFD_RESET_PIN, byte vfd_dig = VFD_DIGITS, byte vfd_dim = VFD_DIMMING);
+  ~VFD_Display();
+  byte vfd_spi_num;
+  byte vfd_en_pin;
+  byte vfd_reset_pin;
+  byte vfd_digits;
+  byte vfd_dimming;
 
   void VFD_Init();
   void VFD_Clear(char bit);

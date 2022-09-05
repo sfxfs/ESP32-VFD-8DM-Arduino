@@ -8,8 +8,6 @@ VFD_Display VFD;
 
 void setup()
 {
-  VFD.vfd_digits = 8;
-  VFD.vfd_dimming = 255;
   VFD.VFD_Init(); //显示屏初始化
 }
 

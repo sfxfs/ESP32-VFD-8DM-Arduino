@@ -1,17 +1,34 @@
 #include <VFD.h>
 
+static const char *VFD_TAG = "VFD";
 static const int spiClk = 5000000; // 5 MHz
-SPIClass *vspi = NULL;
+SPIClass *spi = NULL;
 VFD_cmd_t VFD_initcmd[] = {{SET_DISPLAY_TIMING, EMPTY_DATA},    //设置显示位数
                            {SET_DIMMING_DATA, EMPTY_DATA},      //设置显示亮度
                            {SET_DISPLAT_LIGHT_ON, EMPTY_DATA}}; //设置开启显示
 
+VFD_Display::VFD_Display(byte vfd_spi, byte vfd_en, byte vfd_reset, byte vfd_dig, byte vfd_dim)
+    : vfd_spi_num(vfd_spi)
+    , vfd_en_pin(vfd_en)
+    , vfd_reset_pin(vfd_reset)
+    , vfd_digits(vfd_dig)
+    , vfd_dimming(vfd_dim)
+{
+}
+
+VFD_Display::~VFD_Display()
+{
+    spi = NULL;
+}
+
 void VFD_Display::SPI_Init()
 {
     //初始化SPI
-    vspi = new SPIClass(VSPI);
-    vspi->begin();
-    pinMode(vspi->pinSS(), OUTPUT); // VSPI SS
+    spi = new SPIClass(vfd_spi_num);
+    if (spi == NULL)
+        ESP_LOGE(VFD_TAG, "SPI init fail!");
+    spi->begin();
+    pinMode(spi->pinSS(), OUTPUT); // VSPI SS
 
     //使能VFD
     pinMode(vfd_en_pin, OUTPUT);
@@ -99,33 +116,33 @@ void VFD_Display::VFD_Show_custdata(char bit, char flag)
         VFD_Set_cmd(DCRAM_DATA_WRITE | bit, flag);
     }
     else
-        VFD_Show_str(0, "error0"); // error0代表写入字符超出存储空间
+        ESP_LOGE(VFD_TAG, "beyond DCRAM storage space!");
 }
 
 void VFD_Display::VFD_Write_custdata(char flag, byte *data) // data为5个字节，CGRAM最多能存8个自定义字符
 {
     if (flag >= 0 && flag <= 17)
     {
-        vspi->beginTransaction(SPISettings(spiClk, LSBFIRST, SPI_MODE0));
-        digitalWrite(vspi->pinSS(), LOW);
-        vspi->transfer(CGRAM_DATA_WRITE | flag); //指定存放位置
+        spi->beginTransaction(SPISettings(spiClk, LSBFIRST, SPI_MODE0));
+        digitalWrite(spi->pinSS(), LOW);
+        spi->transfer(CGRAM_DATA_WRITE | flag); //指定存放位置
         for (size_t i = 0; i < 5; i++)
         {
-            vspi->transfer(data[i]); //写入图形数据
+            spi->transfer(data[i]); //写入图形数据
         }
-        digitalWrite(vspi->pinSS(), HIGH);
-        vspi->endTransaction();
+        digitalWrite(spi->pinSS(), HIGH);
+        spi->endTransaction();
     }
     else
-        VFD_Show_str(0, "error0");
+        ESP_LOGE(VFD_TAG, "beyond DCRAM storage space!");
 }
 
 void VFD_Display::VFD_Set_cmd(byte cmd, byte data)
 {
-    vspi->beginTransaction(SPISettings(spiClk, LSBFIRST, SPI_MODE0)); //设置SPI时钟，高低位优先，SPI模式
-    digitalWrite(vspi->pinSS(), LOW);                                 //拉低片选，代表开始传输
-    vspi->transfer(cmd);                                              //写入数据
-    vspi->transfer(data);
-    digitalWrite(vspi->pinSS(), HIGH); //拉高片选，结束传输
-    vspi->endTransaction();
+    spi->beginTransaction(SPISettings(spiClk, LSBFIRST, SPI_MODE0)); //设置SPI时钟，高低位优先，SPI模式
+    digitalWrite(spi->pinSS(), LOW);                                 //拉低片选，代表开始传输
+    spi->transfer(cmd);                                              //写入数据
+    spi->transfer(data);
+    digitalWrite(spi->pinSS(), HIGH); //拉高片选，结束传输
+    spi->endTransaction();
 }
