@@ -119,7 +119,7 @@ void VFD_Display::VFD_Show_custdata(char bit, char flag)
         ESP_LOGE(VFD_TAG, "beyond DCRAM storage space!");
 }
 
-void VFD_Display::VFD_Write_custdata(char flag, byte *data) // data为5个字节，CGRAM最多能存8个自定义字符
+void VFD_Display::VFD_Write_custdata(char flag, const byte *data) // data为5个字节，CGRAM最多能存8个自定义字符
 {
     if (flag >= 0 && flag <= 17)
     {

@@ -3,7 +3,7 @@ This is a example program*/
 
 #include <VFD.h> //使用显示驱动前请先包含该头文件
 
-byte image[5] = {0x7F, 0x6B, 0x5D, 0x6B, 0x7F}; //自定义图像（由取模软件得到）
+const byte image[5] = {0x7F, 0x6B, 0x5D, 0x6B, 0x7F}; //自定义图像（由取模软件得到）
 VFD_Display VFD;
 
 void setup()
