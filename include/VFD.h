@@ -79,6 +79,8 @@ public:
   void VFD_Set_dimming(byte dimming);
   void VFD_Standby_mode(bool mode);
   void VFD_Display_status(bool status);
+  void VFD_FadeIn(byte pertime);
+  void VFD_FadeOut(byte pertime);
 
 private:
   void SPI_Init();

@@ -8,11 +8,7 @@ VFD_cmd_t VFD_initcmd[] = {{SET_DISPLAY_TIMING, EMPTY_DATA},    //设置显示�
                            {SET_DISPLAT_LIGHT_ON, EMPTY_DATA}}; //设置开启显示
 
 VFD_Display::VFD_Display(byte vfd_spi, byte vfd_en, byte vfd_reset, byte vfd_dig, byte vfd_dim)
-    : vfd_spi_num(vfd_spi)
-    , vfd_en_pin(vfd_en)
-    , vfd_reset_pin(vfd_reset)
-    , vfd_digits(vfd_dig)
-    , vfd_dimming(vfd_dim)
+    : vfd_spi_num(vfd_spi), vfd_en_pin(vfd_en), vfd_reset_pin(vfd_reset), vfd_digits(vfd_dig), vfd_dimming(vfd_dim)
 {
 }
 
@@ -94,6 +90,24 @@ void VFD_Display::VFD_Show_str(char bit, String str)
 void VFD_Display::VFD_Set_dimming(byte dimming) // 0 <= dimming <= 255
 {
     VFD_Set_cmd(SET_DIMMING_DATA, dimming);
+}
+
+void VFD_Display::VFD_FadeIn(byte pertime)
+{
+    for (size_t i = 0; i <= 255; i++)
+    {
+        VFD_Set_dimming(i); //字符淡入效果
+        delay(pertime);
+    }
+}
+
+void VFD_Display::VFD_FadeOut(byte pertime)
+{
+    for (size_t i = 255; i > 0; i--)
+    {
+        VFD_Set_dimming(i); //字符淡出效果
+        delay(pertime);
+    }
 }
 
 void VFD_Display::VFD_Display_status(bool status)
