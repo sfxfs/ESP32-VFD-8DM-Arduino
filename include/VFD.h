@@ -65,6 +65,7 @@ public:
   , byte vfd_dim = VFD_DIMMING
   );
   ~VFD_Display();
+  
   byte vfd_spi_num;
   byte vfd_en_pin;
   byte vfd_reset_pin;
