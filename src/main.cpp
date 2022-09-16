@@ -1,7 +1,7 @@
 /*这是一个实例程序
 This is a example program*/
 
-#include <VFD.h> //使用显示驱动前请先包含该头文件
+#include <VFD.hpp> //使用显示驱动前请先包含该头文件
 
 const byte image[5] = {0x7F, 0x6B, 0x5D, 0x6B, 0x7F}; //5字节的自定义图像（由取模软件得到）
 VFD_Display VFD;  //实例化对象
