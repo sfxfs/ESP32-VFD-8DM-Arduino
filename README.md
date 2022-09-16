@@ -3,6 +3,7 @@
 
 ## 1. 说明
 
+- 对象名称为VFD_Display
 - VFD.h为驱动头文件
 - VFD.cpp为驱动主程序
 - main.cpp为提供的示例程序
