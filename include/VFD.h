@@ -1,5 +1,5 @@
-#ifndef __VFD_H
-#define __VFD_H
+#ifndef _VFD_H
+#define _VFD_H
 
 #include <Arduino.h>
 #include <SPI.h>
@@ -48,11 +48,11 @@
 #define SET_STAND_BY_MODE 0xEC
 #define EMPTY_DATA 0x00
 
-typedef struct
+struct VFD_cmd_t
 {
   uint8_t cmd;
   uint8_t data;
-} VFD_cmd_t;
+};
 
 class VFD_Display
 {

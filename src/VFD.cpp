@@ -3,7 +3,7 @@
 static const char *VFD_TAG = "VFD";
 static const int spiClk = 5000000; // 5 MHz
 SPIClass *spi = NULL;
-VFD_cmd_t VFD_initcmd[] = {{SET_DISPLAY_TIMING, EMPTY_DATA},    //设置显示位数
+static VFD_cmd_t VFD_initcmd[] = {{SET_DISPLAY_TIMING, EMPTY_DATA},    //设置显示位数
                            {SET_DIMMING_DATA, EMPTY_DATA},      //设置显示亮度
                            {SET_DISPLAT_LIGHT_ON, EMPTY_DATA}}; //设置开启显示
 
@@ -22,7 +22,10 @@ void VFD_Display::SPI_Init()
     //初始化SPI
     spi = new SPIClass(vfd_spi_num);
     if (spi == NULL)
+    {
         ESP_LOGE(VFD_TAG, "SPI init fail!");
+        return;
+    }
     spi->begin();
     pinMode(spi->pinSS(), OUTPUT); // VSPI SS
 
