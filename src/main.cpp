@@ -40,12 +40,12 @@ void loop()
   VFD.VFD_Standby_mode(false); //退出省电模式
 
   VFD.VFD_FadeOut(3); //淡出效果
+  
+  delay(1000);
 
   VFD.VFD_Clear(-1);                //清除所有位的显示
   VFD.VFD_Write_custdata(0, image); //写入自定义字符，保存为第0个自定义字符
   VFD.VFD_Show_custdata(1, 0);      //在第二位显示第0个自定义字符
-
-  delay(400);
 
   VFD.VFD_FadeIn(3); //淡入效果
 
