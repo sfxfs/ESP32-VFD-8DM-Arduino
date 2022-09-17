@@ -4,8 +4,8 @@ static const char *VFD_TAG = "VFD";
 static const int spiClk = 5000000; // 5 MHz
 SPIClass *spi = NULL;
 static VFD_cmd_t VFD_initcmd[] = {{SET_DISPLAY_TIMING, EMPTY_DATA},    //设置显示位数
-                           {SET_DIMMING_DATA, EMPTY_DATA},      //设置显示亮度
-                           {SET_DISPLAT_LIGHT_ON, EMPTY_DATA}}; //设置开启显示
+                                  {SET_DIMMING_DATA, EMPTY_DATA},      //设置显示亮度
+                                  {SET_DISPLAT_LIGHT_ON, EMPTY_DATA}}; //设置开启显示
 
 VFD_Display::VFD_Display(byte vfd_spi, byte vfd_en, byte vfd_reset, byte vfd_dig, byte vfd_dim)
     : vfd_spi_num(vfd_spi), vfd_en_pin(vfd_en), vfd_reset_pin(vfd_reset), vfd_digits(vfd_dig), vfd_dimming(vfd_dim)
@@ -74,11 +74,16 @@ void VFD_Display::VFD_Clear(char bit)
     }
 }
 
+void VFD_Display::VFD_Show_char(char bit, char chr)
+{
+    VFD_Set_cmd(DCRAM_DATA_WRITE | bit, (byte)chr);
+}
+
 void VFD_Display::VFD_Show_str(char bit, String str)
 {
     for (size_t i = 0; i < str.length(); i++)
     {
-        VFD_Set_cmd(DCRAM_DATA_WRITE | bit, (int)str.charAt(i));
+        VFD_Set_cmd(DCRAM_DATA_WRITE | bit, (byte)str.charAt(i));
         if (bit < vfd_digits - 1)
         {
             bit += 1;
@@ -110,6 +115,15 @@ void VFD_Display::VFD_FadeOut(byte pertime)
     {
         VFD_Set_dimming(i); //字符淡出效果
         delay(pertime);
+    }
+}
+
+void VFD_Display::VFD_RDnum(char bit)
+{
+    for (size_t i = 0; i < 10; i++)
+    {
+        VFD_Show_str(bit, String(i));
+        delay(8);
     }
 }
 

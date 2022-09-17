@@ -7,25 +7,25 @@
 
 // 定义 ALTERNATE_PINS 来指定非标准 GPIO 引脚用于 SPI 总线通讯
 #ifdef ALTERNATE_PINS
-  #define VSPI_MISO   2
-  #define VSPI_MOSI   4
-  #define VSPI_SCLK   0
-  #define VSPI_SS     33
+#define VSPI_MISO 2
+#define VSPI_MOSI 4
+#define VSPI_SCLK 0
+#define VSPI_SS 33
 
-  #define HSPI_MISO   26
-  #define HSPI_MOSI   27
-  #define HSPI_SCLK   25
-  #define HSPI_SS     32
+#define HSPI_MISO 26
+#define HSPI_MOSI 27
+#define HSPI_SCLK 25
+#define HSPI_SS 32
 #else
-  #define VSPI_MISO   MISO
-  #define VSPI_MOSI   MOSI
-  #define VSPI_SCLK   SCK
-  #define VSPI_SS     SS
+#define VSPI_MISO MISO
+#define VSPI_MOSI MOSI
+#define VSPI_SCLK SCK
+#define VSPI_SS SS
 
-  #define HSPI_MISO   12
-  #define HSPI_MOSI   13
-  #define HSPI_SCLK   14
-  #define HSPI_SS     15
+#define HSPI_MISO 12
+#define HSPI_MOSI 13
+#define HSPI_SCLK 14
+#define HSPI_SS 15
 #endif
 
 #if CONFIG_IDF_TARGET_ESP32S2 || CONFIG_IDF_TARGET_ESP32S3
@@ -58,14 +58,9 @@ class VFD_Display
 {
 public:
   VFD_Display(
-    byte vfd_spi = VSPI
-  , byte vfd_en = VFD_EN_PIN
-  , byte vfd_reset = VFD_RESET_PIN
-  , byte vfd_dig = VFD_DIGITS
-  , byte vfd_dim = VFD_DIMMING
-  );
+      byte vfd_spi = VSPI, byte vfd_en = VFD_EN_PIN, byte vfd_reset = VFD_RESET_PIN, byte vfd_dig = VFD_DIGITS, byte vfd_dim = VFD_DIMMING);
   ~VFD_Display();
-  
+
   byte vfd_spi_num;
   byte vfd_en_pin;
   byte vfd_reset_pin;
@@ -74,6 +69,7 @@ public:
 
   void VFD_Init();
   void VFD_Clear(char bit);
+  void VFD_Show_char(char bit, char chr);
   void VFD_Show_str(char bit, String str);
   void VFD_Show_custdata(char bit, char flag);
   void VFD_Write_custdata(char flag, const byte *data);
@@ -82,6 +78,7 @@ public:
   void VFD_Display_status(bool status);
   void VFD_FadeIn(byte pertime);
   void VFD_FadeOut(byte pertime);
+  void VFD_RDnum(char bit);
 
 private:
   void SPI_Init();
