@@ -97,7 +97,7 @@ void VFD_Display::VFD_Set_dimming(byte dimming) // 0 <= dimming <= 255
 
 void VFD_Display::VFD_FadeIn(byte pertime)
 {
-    for (size_t i = 0; i <= vfd_dimming; i++)
+    for (size_t i = 0; i < vfd_dimming; i++)
     {
         VFD_Set_dimming(i); //字符淡入效果
         delay(pertime);
@@ -106,7 +106,7 @@ void VFD_Display::VFD_FadeIn(byte pertime)
 
 void VFD_Display::VFD_FadeOut(byte pertime)
 {
-    for (size_t i = vfd_dimming; i >= 0; i--)
+    for (size_t i = vfd_dimming; i > 0; i--)
     {
         VFD_Set_dimming(i); //字符淡出效果
         delay(pertime);
