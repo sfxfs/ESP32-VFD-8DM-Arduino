@@ -19,8 +19,8 @@ void loop()
   delay(1000);
   for (size_t i = 0; i < 5; i++)
   {
-    VFD.VFD_RDnum(i);
-    VFD.VFD_Show_char(i, i + 50);
+    VFD.VFD_RDnum(i); //第i位数字乱码效果
+    VFD.VFD_Show_char(i, '0' + i);
   }
 
   delay(1000);
