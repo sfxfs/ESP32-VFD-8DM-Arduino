@@ -74,12 +74,43 @@ void VFD_Display::VFD_Clear(char bit)
     }
 }
 
-void VFD_Display::VFD_Show_char(char bit, char chr)
+void VFD_Display::VFD_Show(char bit, int num)
+{
+    if (num >= 0)
+    {
+        int nums[8 - bit];
+        for (int i = 8 - bit; i >= 0; i--)
+        {
+            nums[i] = num % int(pow(10, 9 - bit - i));
+        }
+
+        for (size_t i = 0; i < 8 - bit; i++)
+        {
+            VFD_Show(bit + i, char(nums[i]));
+        }
+    }
+    else
+    {
+        int n_num = abs(num);
+        int nums[8 - 1 - bit];
+        for (int i = 8 - bit; i >= 0; i--)
+        {
+            nums[i] = n_num % int(pow(10, 9 - bit - i));
+        }
+        VFD_Show(bit, '-');
+        for (size_t i = 0; i < 8 - 1 - bit; i++)
+        {
+            VFD_Show(bit + i + 1, char(nums[i]));
+        }
+    }
+}
+
+void VFD_Display::VFD_Show(char bit, char chr)
 {
     VFD_Set_cmd(DCRAM_DATA_WRITE | bit, (byte)chr);
 }
 
-void VFD_Display::VFD_Show_str(char bit, String str)
+void VFD_Display::VFD_Show(char bit, String str)
 {
     for (size_t i = 0; i < str.length(); i++)
     {
@@ -122,7 +153,7 @@ void VFD_Display::VFD_RDnum(char bit)
 {
     for (size_t i = 0; i < 15; i++)
     {
-        VFD_Show_char(bit, i + 48);
+        VFD_Show(bit, char(i + 48));
         delay(8);
     }
 }
