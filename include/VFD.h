@@ -69,7 +69,6 @@ public:
 
   void VFD_Init();
   void VFD_Clear(char bit);
-  void VFD_Show(char bit, int num);     //显示数字
   void VFD_Show(char bit, char chr);    //显示单个字符
   void VFD_Show(char bit, String str);  //显示字符串
   void VFD_Show_custdata(char bit, char flag);
