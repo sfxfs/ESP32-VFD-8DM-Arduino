@@ -57,20 +57,25 @@ struct VFD_cmd_t
 class VFD_Display
 {
 public:
-  VFD_Display(
-      byte vfd_spi = VSPI, byte vfd_en = VFD_EN_PIN, byte vfd_reset = VFD_RESET_PIN, byte vfd_dig = VFD_DIGITS, byte vfd_dim = VFD_DIMMING);
-  ~VFD_Display();
-
   byte vfd_spi_num;
   byte vfd_en_pin;
   byte vfd_reset_pin;
   byte vfd_digits;
   byte vfd_dimming;
 
+  VFD_Display(
+      byte vfd_spi = VSPI,
+      byte vfd_en = VFD_EN_PIN,
+      byte vfd_reset = VFD_RESET_PIN,
+      byte vfd_dig = VFD_DIGITS,
+      byte vfd_dim = VFD_DIMMING
+      );
+  ~VFD_Display();
+
   void VFD_Init();
   void VFD_Clear(char bit);
-  void VFD_Show(char bit, char chr);    //显示单个字符
-  void VFD_Show(char bit, String str);  //显示字符串
+  void VFD_Show(char bit, char chr);
+  void VFD_Show(char bit, String str);
   void VFD_Show_custdata(char bit, char flag);
   void VFD_Write_custdata(char flag, const byte *data);
   void VFD_Set_dimming(byte dimming);
