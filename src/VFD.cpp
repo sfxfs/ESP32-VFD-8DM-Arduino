@@ -31,11 +31,11 @@ VFD_Display::VFD_Display(
 /// @brief VFD的析构函数（释放SPI指针）
 VFD_Display::~VFD_Display()
 {
-    spi = NULL;
+    delete spi;
 }
 
 /// @brief SPI初始化函数
-void VFD_Display::SPI_Init()
+void VFD_Display::SPI_Init() const
 {
     //初始化SPI
     spi = new SPIClass(vfd_spi_num);
@@ -66,7 +66,7 @@ void VFD_Display::SPI_Init()
 }
 
 /// @brief VFD初始化函数
-void VFD_Display::VFD_Init()
+void VFD_Display::VFD_Init() const
 {
     SPI_Init();
     for (size_t i = 0; i < 3; i++)
@@ -77,7 +77,7 @@ void VFD_Display::VFD_Init()
 
 /// @brief VFD清屏函数
 /// @param bit 要清除的显示位（-1则清除所有位）
-void VFD_Display::VFD_Clear(char bit)
+void VFD_Display::VFD_Clear(char bit) const
 {
     if (bit = -1)
     {
@@ -99,7 +99,7 @@ void VFD_Display::VFD_Clear(char bit)
 /// @brief VFD显示单个字符函数
 /// @param bit 要显示的位
 /// @param chr 要显示的字符
-void VFD_Display::VFD_Show(char bit, char chr)
+void VFD_Display::VFD_Show(char bit, char chr) const
 {
     VFD_Set_cmd(DCRAM_DATA_WRITE | bit, (byte)chr);
 }
@@ -107,7 +107,7 @@ void VFD_Display::VFD_Show(char bit, char chr)
 /// @brief VFD显示字符串
 /// @param bit 第一个字符显示的位
 /// @param str 要显示的字符串
-void VFD_Display::VFD_Show(char bit, String str)
+void VFD_Display::VFD_Show(char bit, String str) const
 {
     for (size_t i = 0; i < str.length(); i++)
     {
@@ -127,8 +127,8 @@ void VFD_Display::VFD_Show(char bit, String str)
 /// @param dimming VFD的亮度（最小为0，最大为255）
 void VFD_Display::VFD_Set_dimming(byte dimming) // 0 <= dimming <= 255
 {
-    constrain(dimming, 0, 255);
-    VFD_Set_cmd(SET_DIMMING_DATA, dimming);
+    vfd_dimming = constrain(dimming, 0, 255);
+    VFD_Set_cmd(SET_DIMMING_DATA, vfd_dimming);
 }
 
 /// @brief VFD淡入效果
@@ -155,7 +155,7 @@ void VFD_Display::VFD_FadeOut(byte pertime)
 
 /// @brief VFD乱码效果
 /// @param bit 要乱码的位
-void VFD_Display::VFD_RDnum(char bit)
+void VFD_Display::VFD_RDnum(char bit) const
 {
     for (size_t i = 0; i < 15; i++)
     {
@@ -166,7 +166,7 @@ void VFD_Display::VFD_RDnum(char bit)
 
 /// @brief 设置VFD的开关
 /// @param status VFD的开关
-void VFD_Display::VFD_Display_status(bool status)
+void VFD_Display::VFD_Display_status(bool status) const
 {
     if (status == true)
         VFD_Set_cmd(SET_DISPLAT_LIGHT_ON, EMPTY_DATA);
@@ -176,7 +176,7 @@ void VFD_Display::VFD_Display_status(bool status)
 
 /// @brief VFD待机模式
 /// @param mode 待机模式开启关闭
-void VFD_Display::VFD_Standby_mode(bool mode)
+void VFD_Display::VFD_Standby_mode(bool mode) const
 {
     VFD_Set_cmd(SET_STAND_BY_MODE | mode, EMPTY_DATA);
 }
@@ -184,7 +184,7 @@ void VFD_Display::VFD_Standby_mode(bool mode)
 /// @brief VFD显示自定义字符
 /// @param bit 要显示的位
 /// @param flag 存储的自定义字符的标志
-void VFD_Display::VFD_Show_custdata(char bit, char flag)
+void VFD_Display::VFD_Show_custdata(char bit, char flag) const
 {
     if (flag >= 0 && flag <= 17)
     {
@@ -197,7 +197,7 @@ void VFD_Display::VFD_Show_custdata(char bit, char flag)
 /// @brief 向VFD寄存器写入自定义字符
 /// @param flag 存储的自定义字符的标志（调用时要用）
 /// @param data 写入的自定义字符数据
-void VFD_Display::VFD_Write_custdata(char flag, const byte *data) // data为5个字节，CGRAM最多能存8个自定义字符
+void VFD_Display::VFD_Write_custdata(char flag, const byte *data) const // data为5个字节，CGRAM最多能存8个自定义字符
 {
     if (flag >= 0 && flag <= 17)
     {
@@ -212,13 +212,13 @@ void VFD_Display::VFD_Write_custdata(char flag, const byte *data) // data为5个
         spi->endTransaction();
     }
     else
-        ESP_LOGE(VFD_TAG, "beyond DCRAM storage space!");
+        ESP_LOGE(VFD_TAG, "Out of DCRAM storage space!");
 }
 
 /// @brief 向VFD发送命令或者数据
 /// @param cmd 命令
 /// @param data 数据
-void VFD_Display::VFD_Set_cmd(byte cmd, byte data)
+void VFD_Display::VFD_Set_cmd(byte cmd, byte data) const
 {
     spi->beginTransaction(SPISettings(spiClk, LSBFIRST, SPI_MODE0)); //设置SPI时钟，高低位优先，SPI模式
     digitalWrite(spi->pinSS(), LOW);                                 //拉低片选，代表开始传输
