@@ -45,7 +45,7 @@ void VFD_Display::SPI_Init() const
         return;
     }
     spi->begin();
-    pinMode(spi->pinSS(), OUTPUT); // VSPI SS
+    pinMode(spi->pinSS(), OUTPUT);
 
     //使能VFD
     pinMode(vfd_en_pin, OUTPUT);
