@@ -3,9 +3,6 @@
 static const char *VFD_TAG = "VFD";
 static const int spiClk = 5000000; // 5 MHz
 SPIClass *spi = NULL;
-static VFD_cmd_t VFD_initcmd[] = {{SET_DISPLAY_TIMING, EMPTY_DATA},    //设置显示位数
-                                  {SET_DIMMING_DATA, EMPTY_DATA},      //设置显示亮度
-                                  {SET_DISPLAT_LIGHT_ON, EMPTY_DATA}}; //设置开启显示
 
 /// @brief VFD显示屏的构造函数
 /// @param vfd_spi VFD连接的SPI总线名称
@@ -14,17 +11,16 @@ static VFD_cmd_t VFD_initcmd[] = {{SET_DISPLAY_TIMING, EMPTY_DATA},    //设置�
 /// @param vfd_dig VFD的显示位数
 /// @param vfd_dim VFD的初始亮度
 VFD_Display::VFD_Display(
-                        byte vfd_spi,
-                        byte vfd_en,
-                        byte vfd_reset,
-                        byte vfd_dig,
-                        byte vfd_dim
-                        )
+    byte vfd_spi,
+    byte vfd_en,
+    byte vfd_reset,
+    byte vfd_dig,
+    byte vfd_dim)
     : vfd_spi_num(vfd_spi),
-    vfd_en_pin(vfd_en),
-    vfd_reset_pin(vfd_reset),
-    vfd_digits(vfd_dig),
-    vfd_dimming(vfd_dim)
+      vfd_en_pin(vfd_en),
+      vfd_reset_pin(vfd_reset),
+      vfd_digits(vfd_dig),
+      vfd_dimming(vfd_dim)
 {
 }
 
@@ -59,16 +55,15 @@ void VFD_Display::SPI_Init() const
     delay(10);
     digitalWrite(vfd_reset_pin, HIGH);
     delay(3);
-
-    //初始化配置值
-    VFD_initcmd[0].data = vfd_digits - 1;
-    VFD_initcmd[1].data = vfd_dimming;
 }
 
 /// @brief VFD初始化函数
 void VFD_Display::VFD_Init() const
 {
     SPI_Init();
+    VFD_cmd_t VFD_initcmd[] = {{SET_DISPLAY_TIMING, byte(vfd_digits - 1)}, //设置显示位数
+                               {SET_DIMMING_DATA, vfd_dimming},            //设置显示亮度
+                               {SET_DISPLAT_LIGHT_ON, EMPTY_DATA}};        //设置开启显示
     for (size_t i = 0; i < 3; i++)
     {
         VFD_Set_cmd(VFD_initcmd[i].cmd, VFD_initcmd[i].data);
@@ -76,24 +71,24 @@ void VFD_Display::VFD_Init() const
 }
 
 /// @brief VFD清屏函数
+void VFD_Display::VFD_Clear() const
+{
+    for (size_t i = 0; i < 8; i++)
+    {
+        VFD_Set_cmd(DCRAM_DATA_WRITE | i, DGRAM_DATA_CLAER);
+    }
+}
+
+/// @brief VFD清屏函数
 /// @param bit 要清除的显示位（-1则清除所有位）
 void VFD_Display::VFD_Clear(char bit) const
 {
-    if (bit = -1)
+    if (bit > -1 && bit < 8)
     {
-        for (size_t i = 0; i < 8; i++)
-        {
-            VFD_Set_cmd(DCRAM_DATA_WRITE | i, DGRAM_DATA_CLAER);
-        }
+        VFD_Set_cmd(DCRAM_DATA_WRITE | bit, DGRAM_DATA_CLAER);
     }
     else
-    {
-        if (bit > -1 && bit < 8)
-        {
-            VFD_Set_cmd(DCRAM_DATA_WRITE | bit, DGRAM_DATA_CLAER);
-        }else
         ESP_LOGE(VFD_TAG, "Out of bits!");
-    }
 }
 
 /// @brief VFD显示单个字符函数
@@ -137,7 +132,7 @@ void VFD_Display::VFD_FadeIn(byte pertime)
 {
     for (int i = 0; i < vfd_dimming; i++)
     {
-        VFD_Set_dimming(i); //字符淡入效果
+        VFD_Set_cmd(SET_DIMMING_DATA, i); //字符淡入效果
         delay(pertime);
     }
 }
@@ -148,7 +143,7 @@ void VFD_Display::VFD_FadeOut(byte pertime)
 {
     for (int i = vfd_dimming; i >= 0; i--)
     {
-        VFD_Set_dimming(i); //字符淡出效果
+        VFD_Set_cmd(SET_DIMMING_DATA, i); //字符淡出效果
         delay(pertime);
     }
 }

@@ -43,7 +43,7 @@ void loop()
   
   delay(1000);
 
-  VFD.VFD_Clear(-1);                //清除所有位的显示
+  VFD.VFD_Clear();                //清除所有位的显示
   VFD.VFD_Write_custdata(0, image); //写入自定义字符，保存为第0个自定义字符
   VFD.VFD_Show_custdata(1, 0);      //在第二位显示第0个自定义字符
   VFD.VFD_Show(0, String('x'));

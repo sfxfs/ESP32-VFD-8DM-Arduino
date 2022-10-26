@@ -73,6 +73,7 @@ public:
   ~VFD_Display();
 
   void VFD_Init() const;
+  void VFD_Clear() const;
   void VFD_Clear(char bit) const;
   void VFD_Show(char bit, char chr) const;
   void VFD_Show(char bit, String str) const;
