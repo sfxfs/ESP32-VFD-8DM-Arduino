@@ -2,35 +2,6 @@
 #define _VFD_H
 
 #include <Arduino.h>
-#include <SPI.h>
-#include <esp_log.h>
-
-// 定义 ALTERNATE_PINS 来指定非标准 GPIO 引脚用于 SPI 总线通讯
-#ifdef ALTERNATE_PINS
-#define VSPI_MISO 2
-#define VSPI_MOSI 4
-#define VSPI_SCLK 0
-#define VSPI_SS 33
-
-#define HSPI_MISO 26
-#define HSPI_MOSI 27
-#define HSPI_SCLK 25
-#define HSPI_SS 32
-#else
-#define VSPI_MISO MISO
-#define VSPI_MOSI MOSI
-#define VSPI_SCLK SCK
-#define VSPI_SS SS
-
-#define HSPI_MISO 12
-#define HSPI_MOSI 13
-#define HSPI_SCLK 14
-#define HSPI_SS 15
-#endif
-
-#if CONFIG_IDF_TARGET_ESP32S2 || CONFIG_IDF_TARGET_ESP32S3
-#define VSPI FSPI
-#endif
 
 #define VFD_EN_PIN 16
 #define VFD_RESET_PIN 17
@@ -38,57 +9,46 @@
 #define VFD_DIGITS 8
 #define VFD_DIMMING 255
 
-#define DCRAM_DATA_WRITE 0x20
-#define DGRAM_DATA_CLAER 0x10
-#define CGRAM_DATA_WRITE 0x40
-#define SET_DISPLAY_TIMING 0xE0
-#define SET_DIMMING_DATA 0xE4
-#define SET_DISPLAT_LIGHT_ON 0xE8
-#define SET_DISPLAT_LIGHT_OFF 0xEA
-#define SET_STAND_BY_MODE 0xEC
-#define EMPTY_DATA 0x00
-
 struct VFD_cmd_t
 {
-  uint8_t cmd;
-  uint8_t data;
+  byte cmd;
+  byte data;
 };
 
 class VFD_Display
 {
 public:
-  byte vfd_spi_num;
-  byte vfd_en_pin;
-  byte vfd_reset_pin;
-  byte vfd_digits;
-  byte vfd_dimming;
+  byte spi_num;
+  byte en_pin;
+  byte reset_pin;
+  byte digits;
+  byte dimming;
 
   VFD_Display(
-      byte vfd_spi = VSPI,
-      byte vfd_en = VFD_EN_PIN,
-      byte vfd_reset = VFD_RESET_PIN,
-      byte vfd_dig = VFD_DIGITS,
-      byte vfd_dim = VFD_DIMMING
-      );
+      byte spi = VSPI,
+      byte en = VFD_EN_PIN,
+      byte reset = VFD_RESET_PIN,
+      byte dig = VFD_DIGITS,
+      byte dim = VFD_DIMMING);
   ~VFD_Display();
 
-  void VFD_Init() const;
-  void VFD_Clear() const;
-  void VFD_Clear(char bit) const;
-  void VFD_Show(char bit, char chr) const;
-  void VFD_Show(char bit, String str) const;
-  void VFD_Show_custdata(char bit, char flag) const;
-  void VFD_Write_custdata(char flag, const byte *data) const;
-  void VFD_Set_dimming(byte dimming);
-  void VFD_Standby_mode(bool mode) const;
-  void VFD_Display_status(bool status) const;
-  void VFD_FadeIn(byte pertime);
-  void VFD_FadeOut(byte pertime);
-  void VFD_RDnum(char bit) const;
+  void clear() const;
+  void clear(char bit) const;
+  void show(char bit, char chr) const;
+  void show(char bit, String str) const;
+  void showCustdata(char bit, char flag) const;
+  void writeCustdata(char flag, const byte *data) const;
+  void setDimming(byte dimming);
+  void standbyMode(bool mode) const;
+  void displayStatus(bool status) const;
+  void fadeIn(byte pertime);
+  void fadeOut(byte pertime);
+  void RDnum(char bit) const;
 
 private:
-  void SPI_Init() const;
-  void VFD_Set_cmd(byte cmd, byte data) const;
+  void init() const;
+  void spiInit() const;
+  void setCmd(byte cmd, byte data) const;
 };
 
 #endif
