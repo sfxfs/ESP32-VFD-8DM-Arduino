@@ -46,11 +46,11 @@ static const int spiClk = 5000000; // 5 MHz
 SPIClass *spi = NULL;
 
 /// @brief VFD显示屏的构造函数
-/// @param vfd_spi VFD连接的SPI总线名称
-/// @param vfd_en VFD的EN引脚的连接脚
-/// @param vfd_reset VFD的RESET引脚的连接脚
-/// @param vfd_dig VFD的显示位数
-/// @param vfd_dim VFD的初始亮度
+/// @param spi VFD连接的SPI总线名称
+/// @param en VFD的EN引脚的连接脚
+/// @param reset VFD的RESET引脚的连接脚
+/// @param dig VFD的显示位数
+/// @param dim VFD的初始亮度
 VFD_Display::VFD_Display(
     byte spi,
     byte en,
@@ -122,7 +122,7 @@ void VFD_Display::clear() const
 }
 
 /// @brief VFD清屏函数
-/// @param bit 要清除的显示位（-1则清除所有位）
+/// @param bit 要清除的显示位
 void VFD_Display::clear(char bit) const
 {
     if (bit > -1 && bit < 8)
@@ -164,7 +164,6 @@ void VFD_Display::show(char bit, String str) const
 /// @param dimming VFD的亮度（最小为0，最大为255）
 void VFD_Display::setDimming(byte dimming) // 0 <= dimming <= 255
 {
-    dimming = constrain(dimming, 0, 255);
     setCmd(SET_DIMMING_DATA, dimming);
 }
 

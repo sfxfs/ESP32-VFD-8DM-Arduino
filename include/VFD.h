@@ -18,12 +18,6 @@ struct VFD_cmd_t
 class VFD_Display
 {
 public:
-  byte spi_num;
-  byte en_pin;
-  byte reset_pin;
-  byte digits;
-  byte dimming;
-
   VFD_Display(
       byte spi = VSPI,
       byte en = VFD_EN_PIN,
@@ -32,6 +26,7 @@ public:
       byte dim = VFD_DIMMING);
   ~VFD_Display();
 
+  bool isInit() const;
   void clear() const;
   void clear(char bit) const;
   void show(char bit, char chr) const;
@@ -46,6 +41,12 @@ public:
   void RDnum(char bit) const;
 
 private:
+  byte spi_num;
+  byte en_pin;
+  byte reset_pin;
+  byte digits;
+  byte dimming;
+
   void init() const;
   void spiInit() const;
   void setCmd(byte cmd, byte data) const;
