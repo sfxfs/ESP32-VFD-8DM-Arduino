@@ -26,7 +26,7 @@ public:
       byte dim = VFD_DIMMING);
   ~VFD_Display();
 
-  bool isInit() const;
+  void init() const;
   void clear() const;
   void clear(char bit) const;
   void show(char bit, char chr) const;
@@ -47,7 +47,6 @@ private:
   byte digits;
   byte dimming;
 
-  void init() const;
   void spiInit() const;
   void setCmd(byte cmd, byte data) const;
 };

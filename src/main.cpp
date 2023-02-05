@@ -8,6 +8,7 @@ VFD_Display VFD;                                      //实例化对象
 
 void setup()
 {
+    VFD.init();
 }
 
 void loop()

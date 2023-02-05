@@ -63,7 +63,6 @@ VFD_Display::VFD_Display(
       digits(dig),
       dimming(dim)
 {
-    init();
 }
 
 /// @brief VFD的析构函数（释放SPI指针）
